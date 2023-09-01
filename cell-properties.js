@@ -14,7 +14,9 @@ for (let i = 0; i < rows; i++) {
             fontSize: "14",
             fontColor: "#000000",
             BGcolor: "#ecf0f1",
-            value:"",
+            value: "",
+            formula: "",
+            children: [],
         }
         sheetRow.push(cellProp);
     }
@@ -190,7 +192,9 @@ function addListenerToAttachCellProperties(cell) {
                 break;
         }
 
-
+        let formularBar = document.querySelector(".formula-bar");
+        formularBar.value = cellProp.formula;
+        cell.value = cellProp.value;
 
     });
 }
@@ -199,7 +203,8 @@ function activeCell(address) {
     let [rid, cid] = decodeRIDCIDFromAddress(address);
     //Access cell and storage object
     let cell = document.querySelector(`.cell[rid="${rid}"][cid="${cid}"]`);
-    // console.log(cell);
+
+    // Search in DB for the obj
     let cellProp = sheetDB[rid][cid];
     return [cell, cellProp];
 }

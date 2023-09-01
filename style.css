@@ -80,7 +80,7 @@ body {
     text-align: center;
 }
 
-.formula-name {
+.formula-bar {
     width: calc(100vw - 5rem - 1rem - 1.2rem);
 }
 
