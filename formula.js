@@ -14,7 +14,7 @@ for (let i = 0; i < rows; i++) {
 
             removeChildFromParent(cellProp.formula); //  P-C relationship
             cellProp.value = enteredData; // update childrens with the modified value
-            cellProp.formula = "";  // empty the formula key in object
+            cellProp.formula = "";  // empty the formula key in objectx
             updateChildernCells(address); // update the child accordingly
         });
     }
@@ -33,6 +33,16 @@ formularBar.addEventListener("keydown", (e) => {
             removeChildFromParent(cellProp.formula); // give this old formula so that it can remove it.
         }
 
+        addChildToGraphComponent(inputFormula, address);
+
+        //Check is formula is cyclic or not then only evaluate
+        let isCylic = isGraphCylic(graphComponentMatrix);
+        if (isCylic === true) {
+            alert("Your formula is Cylic");
+            removeChildFromGraphComponent(inputFormula, address);
+            return;
+        }
+
         let evaluatedValue = evaluateFormula(inputFormula);
 
         // To update cell UI And Obj(cell prop) in DB
@@ -42,6 +52,34 @@ formularBar.addEventListener("keydown", (e) => {
         updateChildernCells(address);
     }
 });
+
+function addChildToGraphComponent(formula, childAddress) {
+    let [crid, ccid] = decodeRIDCIDFromAddress(childAddress);
+    let encodedFormula = formula.split(" ");
+
+    for (let i = 0; i < encodedFormula.length; i++) {
+        let char = encodedFormula[i].charCodeAt(0);
+        if (char >= 65 && char <= 90) { // check if formula contains characters if yes then decode them
+            let [prid, pcid] = decodeRIDCIDFromAddress(encodedFormula[i]);
+            // prid -> i, pcid -> j
+            graphComponentMatrix[prid][pcid].push([crid, ccid]);
+        }
+    }
+}
+
+function removeChildFromGraphComponent(formula, childAddress) {
+    let [crid, ccid] = decodeRIDCIDFromAddress(childAddress);
+    let encodedFormula = formula.split(" ");
+
+    for (let i = 0; i < encodedFormula.length; i++) {
+        let char = encodedFormula[i].charCodeAt(0);
+        if (char >= 65 && char <= 90) { // check if formula contains characters if yes then decode them
+            let [prid, pcid] = decodeRIDCIDFromAddress(encodedFormula[i]);
+            // prid -> i, pcid -> j
+            graphComponentMatrix[prid][pcid].pop();
+        }
+    }
+}
 
 // if one cell has changed its formula, then its child (whereever that cell adsress is used) should also get updated accordingly
 function updateChildernCells(parentAddress) {
