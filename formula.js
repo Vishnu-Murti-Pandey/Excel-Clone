@@ -22,7 +22,7 @@ for (let i = 0; i < rows; i++) {
 
 // work on formula bar 
 let formularBar = document.querySelector(".formula-bar");
-formularBar.addEventListener("keydown", (e) => {
+formularBar.addEventListener("keydown", async (e) => {
     let inputFormula = formularBar.value;
     if (e.key === "Enter" && inputFormula) {
         // check if formula has been changed or not
@@ -36,9 +36,14 @@ formularBar.addEventListener("keydown", (e) => {
         addChildToGraphComponent(inputFormula, address);
 
         //Check is formula is cyclic or not then only evaluate
-        let isCylic = isGraphCylic(graphComponentMatrix);
-        if (isCylic === true) {
-            alert("Your formula is Cylic");
+        let cycleResponse = isGraphCylic(graphComponentMatrix);
+        if (cycleResponse) {
+            let response = confirm("There is a cylic formula. Do you want to trace your path?");
+            while (response === true) {
+                // keep on tracking unitl user is clicked OK
+                await isGraphCylicTracePath(graphComponentMatrix, cycleResponse); // I want full iteration of color tracking, so I will attach await here also
+                response = confirm("There is a cylic formula. Do you want to trace your path?");
+            }
             removeChildFromGraphComponent(inputFormula, address);
             return;
         }

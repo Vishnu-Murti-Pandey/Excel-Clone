@@ -33,13 +33,13 @@ function isGraphCylic(graphComponentMatrix) {
                 let response = dfsCylicDetection(graphComponentMatrix, i, j, visited, dfsVisited);
                 if (response === true) {
                     // found cycle so return true, no need to explore more path
-                    return true;
+                    return [i, j];
                 }
             }
         }
     }
     // found cycle so return false
-    return false;
+    return null;
 }
 
 // Start -> visited(true), then dfsVisited(true)
