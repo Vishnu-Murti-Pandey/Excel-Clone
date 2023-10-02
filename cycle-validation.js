@@ -1,14 +1,15 @@
 // Storage
+let collectedGraphComponent = [];
 let graphComponentMatrix = [];
 
-for (let i = 0; i < rows; i++) {
-    let row = [];
-    for (let j = 0; j < cols; j++) {
-        // Why Array -> More than 1 child relation
-        row.push([]);
-    }
-    graphComponentMatrix.push(row);
-}
+// for (let i = 0; i < rows; i++) {
+//     let row = [];
+//     for (let j = 0; j < cols; j++) {
+//         // Why Array -> More than 1 child relation
+//         row.push([]);
+//     }
+//     graphComponentMatrix.push(row);
+// }
 
 // True -> Cylic, False -> Non-cylic
 function isGraphCylic(graphComponentMatrix) {
