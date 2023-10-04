@@ -222,7 +222,4 @@ function decodeRIDCIDFromAddress(address) {
     return [rowID, colID];
 }
 
-
-
-
 console.log({ sheetDB });
